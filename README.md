@@ -7,3 +7,5 @@
 ## Dependencies
 * **Requests**
 * **feedparser**
+* **dotenv**
+* **PyYAML*
