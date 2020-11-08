@@ -56,17 +56,23 @@ def RSSparser(url):
         'content': f"**Date:**  ` {feed['date']} ` \n {feed['link']} \n\n ",
         'avatar_url': feed['icon']
     }
-    
+
     print(f"{rss.feed.title}")
     if u.link != urls[url]:
-        print(f"[NEW ARTICLE] Posting new article: {u.title} to feed {rss.feed.title}")
+        print(
+            "[NEW ARTICLE] "
+            "Posting new article: "
+            f"'{u.title}' to feed '{rss.feed.title}'"
+        )
         urls[url] = u.link
         requests.post(webhook, data=payload)
-        # Update YAML file with new article title for 
+
+        # Update YAML file with new article title
         with open('rss_urls.yaml', 'w') as rss_urls:
             yaml.dump(urls, rss_urls)
     else:
-        print(f"[CURRENT] {rss.feed.title} is up to date")
+        print(f"[CURRENT] '{rss.feed.title}' is up to date")
+
 
 while True:
     with open('rss_urls.yaml') as rss_urls:
