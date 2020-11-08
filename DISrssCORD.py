@@ -1,69 +1,77 @@
-import requests
-import feedparser
+from datetime import datetime
+import os
 import time
 
-wh_init = "https://discordapp.com/api/webhooks/"
-wh_url = wh_init + "WH ID THING GOES HERE"
+from dotenv import load_dotenv
+import feedparser
+import requests
+import yaml
+
+load_dotenv()
+
+webhook_id = os.getenv('WEBHOOK_ID')
+
+wait = 60  # seconds
+webhook = f"https://discordapp.com/api/webhooks/{webhook_id}"
+
 
 def RSSparser(url):
-    rss=feedparser.parse(url)
+    rss = feedparser.parse(url)
 
+    u = rss.entries[0]
+
+    current_time = time.time()
+    current_timestamp = datetime.fromtimestamp(
+        current_time
+    ).strftime("%A, %B %d, %Y %I:%M:%S")
+
+    # Set default values for feed attributes
+    feed = {
+        'link': None,
+        'date': current_timestamp,
+        'icon':
+            'https://live.staticflickr.com/3777/10813661054_709581b384_b.jpg',
+        'title': None,
+        'desc': None,
+        'content': None,
+        'img': None
+    }
+
+    # Try updating feed attributes
     try:
-        f_out=open(rss.feed.title+'-posted-feeds.txt','r')
-    except IOError:
-        print("File not accessible. Creating file.")
-        f_out=open(rss.feed.title+'-posted-feeds.txt','w')
-        f_out.close()
-    finally:
-        f_out.close()
+        feed['link'] = u.link
+        feed['date'] = u.published
+        feed['icon'] = rss.feed.image.href
+        feed['title'] = u.title
+        feed['desc'] = u.summary
+        feed['content'] = u.content
+        feed['img'] = rss.media_thumbnail[0].url
 
-    f_out=open(rss.feed.title+'-posted-feeds.txt','r')
-    f=f_out.read()
-    f=f.strip()
+    except AttributeError as e:
+        print(f'[MISSING] Feed {e}\n')
+        # print(feed)
 
-    u=rss.entries[0]
+    payload = {
+        'username': rss.feed.title,
+        'content': f"**Date:**  ` {feed['date']} ` \n {feed['link']} \n\n ",
+        'avatar_url': feed['icon']
+    }
+    
+    print(f"{rss.feed.title}")
+    if u.link != urls[url]:
+        print(f"[NEW ARTICLE] Posting new article: {u.title} to feed {rss.feed.title}")
+        urls[url] = u.link
+        requests.post(webhook, data=payload)
+        # Update YAML file with new article title for 
+        with open('rss_urls.yaml', 'w') as rss_urls:
+            yaml.dump(urls, rss_urls)
+    else:
+        print(f"[CURRENT] {rss.feed.title} is up to date")
 
-    try:
-        link=u.link
-    except:
-        link = "Link could not be retrieved. (Uh oh)"
-        #title=u.title
-    try:
-        date=u.published
-    except:
-        date="Date could not be retrieved."
-        #desc=u.summary
-        #content=u.content
-    try:
-        icon=rss.feed.image.href
-    except:
-        icon="https://live.staticflickr.com/3777/10813661054_709581b384_b.jpg"
-    #img=rss.media_thumbnail[0].url
+while True:
+    with open('rss_urls.yaml') as rss_urls:
+        urls = yaml.load(rss_urls, Loader=yaml.FullLoader)
 
-    payload={
-        'username':rss.feed.title,
-        'content':'**Date:** '+'`'+date+'`'+'\n'+link+'\n\n ',
-        'avatar_url':icon
-        }
-    print("Up to date:",u.title == f)
-    if u.title != f:
-        print("Posting new article:",u.title, "to feed ", rss.feed.title)
-        r = requests.post(wh_url,data=payload)
-        f_out.close()
-        f_out=open(rss.feed.title+'-posted-feeds.txt','w')
-        f_out.write(u.title)
-    f_out.close()
-while True: # URLs go here vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-    for url in [
-    'http://rss.sciam.com/ScientificAmerican-News',
-    'http://feeds.arstechnica.com/arstechnica/science',
-    'https://www.sciencedaily.com/rss/top/science.xml',
-    'https://www.technologyreview.com/topnews.rss',
-    'https://www.wired.com/feed/category/science/latest/rss',
-    'https://www.reddit.com/r/science/.rss',
-    'https://www.space.com/feeds/all',
-    'http://www.sciencemag.org/rss/news_current.xml',
-    'http://feeds.nature.com/nature/rss/current',
-    ]:
+    for url in list(urls.keys()):
         RSSparser(url)
-    time.sleep(5)
+    time.sleep(wait)
