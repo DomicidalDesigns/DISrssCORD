@@ -8,4 +8,4 @@
 * **Requests**
 * **feedparser**
 * **dotenv**
-* **PyYAML*
+* **PyYAML**
