@@ -15,7 +15,7 @@
 * You need a Discord webhook link so first setup a webhook for your discord server. Learn how to do that [here.](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 #### Do not share this webhook link with anyone. Anyone with this link can post anything they want to your discord server.
 ### Clone this repo
-* `git clone` or download this repo
+* `git clone https://github.com/DomicidalDesigns/DISrssCORD.git` or download this repo
 ### Change Webhook Environment Variable
 * Edit `env.example`.
 * Change `YOUR-WEBHOOK-ID` to whatever the rest of your webhook link looks like.
