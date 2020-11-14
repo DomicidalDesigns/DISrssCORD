@@ -11,17 +11,21 @@
 * **PyYAML**
 
 ## How to Use
-First setup a webhook for your discord server. Learn how to do that [here.](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)\
-Clone or download this repo and edit `env.example`.\
-Change `YOUR-WEBHOOK-ID` to whatever the rest of your webhook link looks like.\
+### Setup Your Webhook
+* You need a Discord webhook link so first setup a webhook for your discord server. Learn how to do that [here.](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
+#### Do not share this webhook link with anyone. Anyone with this link can post anything they want to your discord server.
+### Clone this repo
+* `git clone` or download this repo
+### Change Webhook Environment Variable
+* Edit `env.example`.
+* Change `YOUR-WEBHOOK-ID` to whatever the rest of your webhook link looks like.
+  * Include everything after `https://discordapp.com/api/webhooks/`.
+  * If your link was `https://discordapp.com/api/webhooks/123456789/NotARealLink/` then your .env file would look like: ```WEBHOOK_ID=123456789/NotARealLink```
 
-Include everything after `https://discordapp.com/api/webhooks/`.\
-If your link was `https://discordapp.com/api/webhooks/123456789/NotARealLink/` then your .env file would look like: ```WEBHOOK_ID=123456789/NotARealLink```
-
-Rename `env.example` to `.env`\
-**Do not share this file with anyone. Do not put this file in version control. Anyone with this link can post anything they want to your discord server.**
-
-Open up your favorite console and run `python DISrssCORD.py`
+* Rename `env.example` to `.env`
+#### Do not share this file with anyone. Do not put this file in version control. Anyone with this link can post anything they want to your discord server.
+### Run DISrssCORD
+* Open up your favorite console and run `python DISrssCORD.py`
 
 ## How to Add Feeds
 Simply add a URL to the end of the rss_urls.yaml file and add a colon after the url `https://www.wired.com/feed/category/science/latest/rss:`
