@@ -22,7 +22,7 @@
   * Include everything after `https://discordapp.com/api/webhooks/`.
   * If your link was `https://discordapp.com/api/webhooks/123456789/NotARealLink/` then your .env file would look like: ```WEBHOOK_ID=123456789/NotARealLink```
 
-* Rename `env.example` to `.env`
+* Save `env.example` as `.env`
 #### Do not share this file with anyone. Do not put this file in version control. Anyone with this link can post anything they want to your discord server.
 ### Run DISrssCORD
 * Open up your favorite console and run `python DISrssCORD.py`
