@@ -73,7 +73,7 @@ def RSSparser(url):
             'https://live.staticflickr.com/3777/10813661054_709581b384_b.jpg'
     }
 
-    print(f"{rsstitle}")
+    print(f"\n{rsstitle}")
     # Get newest article link and compare it to the one saved in the YAML file
     if u.link != urls[url]:
         print(
