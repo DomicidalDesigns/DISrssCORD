@@ -20,8 +20,9 @@ frequency['post'] = 10  # seconds - posting between each feed
 DEBUG = True
 
 if DEBUG:
-    frequency['update'] = 1
-    frequency['post'] = 1
+    frequency['update'] = 60
+    frequency['post'] = 10
+
 
 
 def RSSparser(url):
