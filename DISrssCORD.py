@@ -17,7 +17,7 @@ frequency['update'] = 60  # seconds - checking for new posts
 frequency['post'] = 10  # seconds - posting between each feed
 
 # DEBUG
-DEBUG = False
+DEBUG = True
 
 if DEBUG:
     frequency['update'] = 1
