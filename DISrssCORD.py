@@ -1,6 +1,7 @@
 from datetime import datetime
 import os
 import time
+import urllib
 
 from dotenv import load_dotenv
 import feedparser
@@ -20,18 +21,41 @@ frequency['post'] = 10  # seconds - posting between each feed
 DEBUG = True
 
 if DEBUG:
-    frequency['update'] = 60
-    frequency['post'] = 10
+    frequency['update'] = 1
+    frequency['post'] = 1
 
+
+def trunk(headline, MAX_LENGTH):
+    '''Truncates headline without stopping in the middle of a word.
+    '''
+    if len(headline) < MAX_LENGTH:
+        return headline
+    
+    words = headline.split(' ')
+    headline = ''
+    for word in words:
+        if len(headline) + len(word) +3 > MAX_LENGTH:
+            return headline + '...'
+        headline += word + ' '
+    return headline
 
 
 def RSSparser(url):
     '''Fetches newest RSS article and posts it to a discord webhook url.
     '''
-    rss = feedparser.parse(url)
-    # Most recent article
-    u = rss.entries[0]
-
+    try:
+        rss = feedparser.parse(url)
+    except urllib.error.URLError as e:
+        print(e)
+        return
+    
+    try:
+        # Most recent article
+        u = rss.entries[0]
+    except IndexError as e:
+        print(e)
+        return
+    
     rsstitle = rss.feed.get('title', 'No title')
 
     current_time = time.time()
@@ -65,7 +89,7 @@ def RSSparser(url):
     payload = {
         'username':
             # This sets the webhook bot's username to the post title.
-            feed['title'].split('. ')[0],
+            trunk(feed['title'], 80),
         'content':
             # This is the message sent to the discord channel (Markdown works).
             f"{feed['link']} \n",
@@ -82,8 +106,15 @@ def RSSparser(url):
             "Posting new article: "
             f"'{feed['title']}' to feed '{rsstitle}'"
         )
-        urls[url] = u.link
+
         post = requests.post(webhook, data=payload)
+        if '204' not in str(post):
+            print(post, feed['link'], '\n')
+            print(payload)
+            return post
+
+        urls[url] = u.link
+
         # DEBUG:
         if DEBUG:
             print(post, feed['link'], '\n')
