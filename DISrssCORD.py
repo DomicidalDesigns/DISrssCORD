@@ -30,11 +30,11 @@ def trunk(headline, MAX_LENGTH):
     '''
     if len(headline) < MAX_LENGTH:
         return headline
-    
+
     words = headline.split(' ')
     headline = ''
     for word in words:
-        if len(headline) + len(word) +3 > MAX_LENGTH:
+        if len(headline) + len(word) + 3 > MAX_LENGTH:
             return headline + '...'
         headline += word + ' '
     return headline
@@ -48,14 +48,14 @@ def RSSparser(url):
     except urllib.error.URLError as e:
         print(e)
         return
-    
+
     try:
         # Most recent article
         u = rss.entries[0]
     except IndexError as e:
         print(e)
         return
-    
+
     rsstitle = rss.feed.get('title', 'No title')
 
     current_time = time.time()
