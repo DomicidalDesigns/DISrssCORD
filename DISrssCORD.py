@@ -31,11 +31,11 @@ def trunk(headline, MAX_LENGTH):
     if len(headline) < MAX_LENGTH:
         return headline
 
-    words = headline.split(' ')
+    words = headline.split()
     headline = ''
     for word in words:
         if len(headline) + len(word) + 3 > MAX_LENGTH:
-            return headline + '...'
+            return headline.rstrip() + '...'
         headline += word + ' '
     return headline
 
